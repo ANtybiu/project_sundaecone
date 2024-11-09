@@ -418,7 +418,7 @@
     )
 
     moveZombie();
- //   spawnZombie()
+    spawnZombie()
   },zombieCooldown)}
   }
 
