@@ -237,7 +237,7 @@
         collisionLeft = true;
       }else{collisionLeft = false}*/
     }
-    function showEnterHouse(){
+  /*  function showEnterHouse(){
       document.getElementById('enter-house').style=""
     }      
     function houseNo(){
@@ -267,7 +267,7 @@
         document.getElementById('world').style.backgroundImage="url(grass.png)"
       },1300)
     }
-    document.addEventListener('mousemove',function(event){
+   */ document.addEventListener('mousemove',function(event){
       mouseX = event.clientX;
       mouseY = event.clientY;
     })
@@ -736,7 +736,7 @@ function controlBack(){
       <button id="controls" class="welcome-buttons" onclick="controls()">Controls</button>
       <button id="credit" class="welcome-buttons" onclick="credit()">Credit</button>
     </div>
-    <div id="version-info"><div>Version 1.0 </div> <button id="version-button" onclick="patch_notes()">Patch Notes</button></div>
+    <div id="version-info"><div>Version 1.0.0 </div> <button id="version-button" onclick="patch_notes()">Patch Notes</button></div>
   `
 }
 function credit(){
