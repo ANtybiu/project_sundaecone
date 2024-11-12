@@ -757,7 +757,7 @@ function addHealth(){
 }
 
 function roundManager(){
-  if((zombieKilled/2)===zombieLimit){
+  if((zombieKilled)===zombieLimit){
     round ++
     if(zombieLimit>50){
       zombieSpawned = 1;
