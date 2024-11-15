@@ -4,7 +4,7 @@
     let walkingLeft = false;
     let walkingRight = false;
     let coinCount = 1;
-    let healthCount = 100;
+    let healthCount = 101231231230;
     let healthPotionCount = 1;
     let manaCount = 100;
     let manaPotionCount = 1;
@@ -30,12 +30,12 @@
     let mana_frame = 1;
     let houseBounds = document.getElementById('house-south-container').getBoundingClientRect()
     let mouseX,mouseY;
-    let projectileSpeed = 5;
+    let projectileSpeed = 10;
     let zombieCooldown = 1000;
     let zombieID = -1;
     let bulletID = -1;
     let bullets = {};
-    let bulletIntervals = [];
+    let bulletIntervals = {};
     let startedBullets = [];
     let shootingCooldown = 100;
     let zombies = {};
@@ -47,7 +47,7 @@
     let diedVar = false;
     let bulletNum = 40;
     let movedUp,movedDown,movedLeft,movedRight;
-    let zombieSpeed = 1;
+    let zombieSpeed = 2;
     let zombieLimit = 5;
     let round = 1;
     let zombieKilled = 0;
@@ -58,12 +58,23 @@
     let walls = {};
     let zombieCollided,placed = false;
     let wallCount = 0;
+    let start = false;
+    let removeShoot = true;
+    let Btime = 16;
     //bobs or vagana which ever will it be sit the fuck down t-series im here to spill the real tea you tryna get through me for spot of number 1 but you india you lose so they think you never won when im thru with you your gonna be completely fucking done else we only just begun i rate you 0 by bitch gone so come on t series looking hungry for some drama here let me serve you bitch lasagna
 
   function startGameLoop(){
     document.getElementById('welcome').style.display=`none`;
     document.getElementById('overworld').style.display=`flex`
+    gameLoop()
+
   }
+  function gameLoop() {
+    
+    spawnZombie();
+    
+  }
+  
 
   
     function updateCharacter() {
@@ -245,7 +256,7 @@
       }else{
         houseLeft = false;
       }
-      console.log(collisionUp)
+
       /*if(positionY>=160 || positionX<=280 || positionY< 245){
         collisionDown = true;
       } else{collisionDown = false}
@@ -288,7 +299,7 @@
       mouseY = event.clientY;
     })
     function shootProjectile(){
-      if(!alreadyShooting && bulletNum>0){
+      if(!alreadyShooting && bulletNum>0 && removeShoot){
         alreadyShooting = true;
         bulletID ++
       document.getElementById('overworld').innerHTML += `<img src="object_frames/bullet.png" class="bullet" id="B${bulletID}" style>`
@@ -316,30 +327,38 @@
       document.getElementById(`B${bulletID}`).style.transform=`rotate(${rotation}deg)`
       bulletNum --;
       document.getElementById('bullet-count').innerHTML = `${bulletNum}`
-      bullets[bulletID] = [projectilePOSX,projectilePOSY,velocityY,velocityX,bulletID,-1,false,''];
-      bulletIntervals.push(
+      bullets[bulletID] = [projectilePOSX,projectilePOSY,velocityY,velocityX,bulletID,-1,false,'',false,rotation];
+      bulletIntervals[bulletID] =
         function bulletInterval(){
-          let time = 1;
+          let time = 16;
           let posX = bullets[bulletID][0];
           let posY = bullets[bulletID][1];
           let vY = bullets[bulletID][2];
           let vX = bullets[bulletID][3];
           let ID = bullets[bulletID][4];
           let zID = bullets[bulletID][4];
+          if(!bullets[ID][8]){
+            bullets[ID][8] = true
      bullets[ID][7] = setInterval(function(){
+      console.log(bullets[ID][7])
       if(bullets[ID] !== undefined && bullets[ID] !== null){
       bullets[ID][0] += bullets[ID][3]
       bullets[ID][1] += bullets[ID][2]
+     console.log(ID)
+      
              document.getElementById(`B${ID}`).style.top = `${bullets[ID][1]}px`;
              document.getElementById(`B${ID}`).style.left = `${bullets[ID][0]}px`;
          //    console.log(`${vY},${velocityY},${posX},${projectilePOSX}`);
              if(bullets[ID][0]>2000 || bullets[ID][1]>1000 || bullets[ID][0]<-50 || bullets[ID][1]<-50){
-              document.getElementById('overworld').removeChild(document.getElementById(`B${ID}`));
               clearInterval(bullets[ID][7])
+              bullets[ID][7] = ''
+              document.getElementById('overworld').removeChild(document.getElementById(`B${ID}`))
+              
+              
              }}
-           },time)
+           },Btime)}
          }
-      )
+      
       moveBullet();
       setTimeout(function(){
         alreadyShooting = false
@@ -377,7 +396,7 @@
     let z_velocityY = Math.random()
     let vectorX = zombieX - positionX;
     let vectorY = zombieY - positionY;
-    zombies[zombieID] = [zombieX,zombieY,zombieID,z_velocityX,z_velocityY,false,Math.random()*1000,20,vectorX,'',vectorY,'',100,Math.random(),Math.random(),false,'','']
+    zombies[zombieID] = [zombieX,zombieY,zombieID,z_velocityX,z_velocityY,false,Math.random()*1000,32,vectorX,'',vectorY,'',100,Math.random(),Math.random(),false,'','']
     while (zombies[zombieID][6]<250 || zombies[zombieID][6]>750){zombies[zombieID][6]=Math.random()*1000}
     zombieIntervals.push(
       function zombieInterval(){
@@ -457,7 +476,6 @@
   function moveZombie(){
     if(!zombieCollided){
     zombieIntervals[zombieID]();
-    console.log(zombieID)
     }
   }
 
@@ -470,7 +488,7 @@
       Object.keys(bullets).forEach((bulletName) => {
         const bulletX = bullets[bulletName][0];
         const bulletY = bullets[bulletName][1];
-
+//        console.log(bullets)
         const dx = zombieX - bulletX;
         const dy = zombieY - bulletY;
         const distance = Math.sqrt(dx * dx + dy * dy);
@@ -479,8 +497,9 @@
         if (distance < collideD) {
   //        console.log(`Collision detected between Zombie ${zombieName} and Bullet ${bulletName}`);
           if(zombies[zombieName][12]>0){
-            console.log('ass')
-            clearInterval(bulletIntervals[bulletName]);
+ //           console.log('ass')
+ //           clearInterval(bulletIntervals[bulletName]);
+            clearInterval(bullets[bulletName][7])
             document.getElementById('overworld').removeChild(document.getElementById(`B${bulletName}`));
             delete bullets[bulletName];
             delete bulletIntervals[bulletName];
@@ -499,8 +518,9 @@
           delete zombies[zombieName];
           delete zombieIntervals[zombieName];
           clearInterval(bullets[bulletName][7]);
+          bullets[bulletName][7] = '';
           clearInterval(bulletIntervals[bulletName]);
-          document.getElementById('overworld').removeChild(document.getElementById(`B${bulletName}`));
+          document.getElementById('overworld').innerHTML -= `<img src="object_frames/bullet.png" class="bullet" id="B${bulletName}" style="transform: rotate(${bullets[bulletName][9]}deg); top: ${bullets[bulletName][1]}px; left: ${bullets[bulletName][0]}px;">`;
           delete bullets[bulletName];
           delete bulletIntervals[bulletName];
           
@@ -508,14 +528,52 @@
           
          
 
-        }}console.log(zombies[zombieName][12])
+        }}
+      
       });
     });
   }
   
   
+let cum = false;
+let debugOBJ = {};
+let debugOBJINDEX = 0
+let projectileSpeedChanged = false;
+setInterval(function () {
+  asshole();
+  console.log(bulletID);
+  
+  if (bulletID >= 50 && !cum) {
+    removeShoot = false;
+    cum = true;
 
-  setInterval(asshole, 1);
+    setTimeout(function () {
+      console.log('lol');
+      bulletID = -1;
+      cum = false;
+      removeShoot = true;
+      let sorryBullet = 0;
+
+      Object.keys(bullets).forEach((bulletName) => {
+        let bulletElement = document.getElementById(`B${bulletName}`)
+          clearInterval(bulletIntervals[bulletName]);
+          clearInterval(bullets[bulletName][7])
+          if (bulletElement) {
+            document.getElementById('overworld').removeChild(bulletElement);
+            sorryBullet ++;
+          }
+          delete bulletIntervals[bulletName];
+          delete bullets[bulletName]
+        
+      });
+
+      bulletNum += sorryBullet;
+      bullets = {};
+      bulletIntervals = {};
+    }, 60);
+  }
+}, 50);
+
   let coinNo = -1;
   function spawnCoin(zY,zX){
     coinNo ++;
@@ -554,7 +612,7 @@ coinObject[cID][2] = setInterval(function(){
           }
         });
       };
-    setInterval(pickUpCoin,1)
+    setInterval(pickUpCoin,50)
     
   function checkZombieCharacterCollision(){
     Object.keys(zombies).forEach((zombieName) => {
@@ -603,7 +661,7 @@ coinObject[cID][2] = setInterval(function(){
 
 });
 }
-setInterval(checkZombieCharacterCollision,16)
+setInterval(checkZombieCharacterCollision,50)
 function died(){
   if (healthCount === 0){
     diedVar = true
@@ -611,7 +669,7 @@ function died(){
     document.getElementById('game-over-container').style.display=`flex`  
   }
 }
-setInterval(died,1)
+setInterval(died,250)
 function trade(item){
   if(coinCount>0 && item === 'bullet'){
     coinCount --;
@@ -650,7 +708,7 @@ function closeTradePopUp(){
     document.getElementById('trade-popup').style.display="none"
   }
 }
-setInterval(closeTradePopUp,1)
+setInterval(closeTradePopUp,250)
 function tradeSwitch(item){
   if(item === 'mana'){
     itemz = 'mana'
@@ -757,24 +815,21 @@ function addHealth(){
 }
 
 function roundManager(){
+  
   if((zombieKilled)===zombieLimit){
-    round ++
-    if(zombieLimit>50){
-      zombieSpawned = 1;
-      zombieKilled = 0;
-      zombieSpeed +=0.25
-      zombieCooldown -=2.5
-      spawnZombie()
-    }else{
-      projectileSpeed += 0.025;
+    round ++;
+      zombies = {};
+      zombieIntervals = [];
+      zombieID = -1;
+      
     zombieLimit += 5;
     spawnZombie();
-    console.log(zombieLimit)
+
     zombieSpawned = 1;
     zombieKilled = 0;
-    zombieSpeed += 0.1;
+    zombieSpeed += 0.2;
     zombieCooldown -= 1;
-    document.getElementById('round-container').innerHTML=`Round ${round}`}
+    document.getElementById('round-container').innerHTML=`Round ${round}`
   }
  // console.log(`roundmanager run`)
 }
@@ -782,11 +837,8 @@ function roundManager(){
 
 setInterval(function(){
   roundManager()
-},10)
+},100)
   
-function gameLoop(){
-  spawnZombie()
-}
 function controls(){
   document.getElementById('welcome').innerHTML = `
   <div id="disclaimer" style="font-size:10px; position:fixed; top:0;left:0;">Disclaimer: All pixel art DO NOT originate from me.</div>
@@ -824,7 +876,7 @@ function controlBack(){
       <button id="controls" class="welcome-buttons" onclick="controls()">Controls</button>
       <button id="credit" class="welcome-buttons" onclick="credit()">Credit</button>
     </div>
-    <div id="version-info"><div>Version 1.1.1 </div> <button id="version-button" onclick="patch_notes()">Patch Notes</button></div>
+    <div id="version-info"><div>Version 1.1.2 </div> <button id="version-button" onclick="patch_notes()">Patch Notes</button></div>
   `
 }
 function credit(){
@@ -1000,7 +1052,7 @@ function checkWallBulletCollision(){
       
     }
     if(walls[wallName][2]===0){
-      clearInterval(bulletIntervals[bulletName]);
+//      clearInterval(bulletIntervals[bulletName]);
       delete bullets[bulletName];
       delete bulletIntervals[bulletName];
       document.getElementById('overworld').removeChild(document.getElementById(`W${wallName}`));
@@ -1051,10 +1103,9 @@ function checkWallZombieCollision() {
     });
   });
 }
-
-
 setInterval(function(){
   checkWallBulletCollision();
-  checkWallCharacterCollision();
-  checkWallZombieCollision();
-},1)
+    checkWallCharacterCollision();
+    checkWallZombieCollision();
+},50)
+
