@@ -30,13 +30,16 @@
       }
       .header-child, #game-title {
         flex: 1;
-        cursor: pointer;
+        
         transition: text-decoration 0.2s;
       }
-      .header-child:hover {
+      #child{
+        cursor: pointer;
+      }
+      #child:hover {
         text-decoration: underline;
       }
-      .header-child:active {
+      #child:active {
         opacity: 0.9;
       }
       #preview-img-container {
@@ -70,10 +73,10 @@
     <div id="main-container">
       <div id="header">
         <div id="game-title" style="cursor:default;font-weight: bold;font-size:28px">COC N BALLZ</div>
-        <div id="about" class="header-child">About us</div>
-        <div id="patches" class="header-child">Updates</div>
-        <div id="copyright" class="header-child">Copyright</div>
-        <div id="join-us" class="header-child">Join us</div>
+        <div id="about" class="header-child"><span id="child">About us</span></div>
+        <div id="patches" class="header-child"><span id="child">Updates</span></div>
+        <div id="copyright" class="header-child"><span id="child">Copyright</span></div>
+        <div id="join-us" class="header-child"><span id="child">Join us</span></div>
       </div>
       <div id="main-body">
         <div id="preview-img-container">
@@ -118,6 +121,16 @@
             <div>
               1 &middot; Fixed critical lag issues during rounds 5 and above.<br>
               2 &middot; The patch notes button now leads to this webpage.
+            </div>   
+          </div>
+
+          <div id="version-type">
+            <div style="font-size:28px;font-weight: bold;margin-top:50px;text-decoration:underline;margin-bottom:10px;">
+              Version 1.1.3:
+            </div>
+            <div>
+              1 &middot; Walls now 'snap' to grid.<br>
+              2 &middot; There is now a 10 second delay in between rounds.
             </div>   
           </div>
           
