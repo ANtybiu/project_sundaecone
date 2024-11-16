@@ -4,7 +4,7 @@
     let walkingLeft = false;
     let walkingRight = false;
     let coinCount = 1;
-    let healthCount = 101231231230;
+    let healthCount = 100;
     let healthPotionCount = 1;
     let manaCount = 100;
     let manaPotionCount = 1;
@@ -30,7 +30,7 @@
     let mana_frame = 1;
     let houseBounds = document.getElementById('house-south-container').getBoundingClientRect()
     let mouseX,mouseY;
-    let projectileSpeed = 10;
+    let projectileSpeed = 15;
     let zombieCooldown = 1000;
     let zombieID = -1;
     let bulletID = -1;
@@ -57,10 +57,12 @@
     let wallID = -1;
     let walls = {};
     let zombieCollided,placed = false;
-    let wallCount = 0;
+    let wallCount = 1;
     let start = false;
     let removeShoot = true;
     let Btime = 16;
+    let wallgrid = 60;
+    let wallgridY = 15;
     //bobs or vagana which ever will it be sit the fuck down t-series im here to spill the real tea you tryna get through me for spot of number 1 but you india you lose so they think you never won when im thru with you your gonna be completely fucking done else we only just begun i rate you 0 by bitch gone so come on t series looking hungry for some drama here let me serve you bitch lasagna
 
   function startGameLoop(){
@@ -340,11 +342,11 @@
           if(!bullets[ID][8]){
             bullets[ID][8] = true
      bullets[ID][7] = setInterval(function(){
-      console.log(bullets[ID][7])
+
       if(bullets[ID] !== undefined && bullets[ID] !== null){
       bullets[ID][0] += bullets[ID][3]
       bullets[ID][1] += bullets[ID][2]
-     console.log(ID)
+
       
              document.getElementById(`B${ID}`).style.top = `${bullets[ID][1]}px`;
              document.getElementById(`B${ID}`).style.left = `${bullets[ID][0]}px`;
@@ -465,7 +467,7 @@
     )
 
     moveZombie();
-    spawnZombie()
+    spawnZombie();
   },zombieCooldown)}
   }
 
@@ -541,7 +543,6 @@ let debugOBJINDEX = 0
 let projectileSpeedChanged = false;
 setInterval(function () {
   asshole();
-  console.log(bulletID);
   
   if (bulletID >= 50 && !cum) {
     removeShoot = false;
@@ -813,23 +814,60 @@ function addHealth(){
     }
    }}
 }
-
+let time = 11
+let timeINV = 0;
 function roundManager(){
-  
+  console.log(zombieKilled)
+  console.log(zombieSpawned)
   if((zombieKilled)===zombieLimit){
     round ++;
       zombies = {};
       zombieIntervals = [];
       zombieID = -1;
-      
+      console.log('kik')
     zombieLimit += 5;
-    spawnZombie();
-
-    zombieSpawned = 1;
+    
+    setTimeout(()=>{
+      document.getElementById('round-container').innerHTML=`Round ${round} starting in 10s`
+    },1000)
+    setTimeout(()=>{
+      document.getElementById('round-container').innerHTML=`Round ${round} starting in 9s`
+    },2000)
+    setTimeout(()=>{
+      document.getElementById('round-container').innerHTML=`Round ${round} starting in 8s`
+    },3000)
+    setTimeout(()=>{
+      document.getElementById('round-container').innerHTML=`Round ${round} starting in 7s`
+    },4000)
+    setTimeout(()=>{
+      document.getElementById('round-container').innerHTML=`Round ${round} starting in 6s`
+    },5000)
+    setTimeout(()=>{
+      document.getElementById('round-container').innerHTML=`Round ${round} starting in 5s`
+    },6000)
+    setTimeout(()=>{
+      document.getElementById('round-container').innerHTML=`Round ${round} starting in 4s`
+    },7000)
+    setTimeout(()=>{
+      document.getElementById('round-container').innerHTML=`Round ${round} starting in 3s`
+    },8000)
+    setTimeout(()=>{
+      document.getElementById('round-container').innerHTML=`Round ${round} starting in 2s`
+    },9000)
+    setTimeout(()=>{
+      document.getElementById('round-container').innerHTML=`Round ${round} starting in 1s`
+    },10000)
+    setTimeout(()=>{
+      zombieSpawned = 0;
     zombieKilled = 0;
     zombieSpeed += 0.2;
     zombieCooldown -= 1;
-    document.getElementById('round-container').innerHTML=`Round ${round}`
+    document.getElementById('round-container').innerHTML=`Round ${round}`;
+    spawnZombie();
+    },11000)
+     time = 11
+     timeINV = 0;
+    
   }
  // console.log(`roundmanager run`)
 }
@@ -876,7 +914,7 @@ function controlBack(){
       <button id="controls" class="welcome-buttons" onclick="controls()">Controls</button>
       <button id="credit" class="welcome-buttons" onclick="credit()">Credit</button>
     </div>
-    <div id="version-info"><div>Version 1.1.2 </div> <button id="version-button" onclick="patch_notes()">Patch Notes</button></div>
+    <div id="version-info"><div>Version 1.1.3 </div> <button id="version-button" onclick="patch_notes()">Patch Notes</button></div>
   `
 }
 function credit(){
@@ -932,10 +970,16 @@ if(!placed && wallCount>0){
   document.getElementById('wall-count').innerHTML = `${wallCount}`;
   placed = true;
   if (movedDown){
+    console.log('ass')
     wallID ++;
-    let wallY = positionY-100;
-    let wallX = positionX+(75);
-    if(wallY>480){wallY===480}
+    let wallY = positionY+96;
+    let wallX = positionX+(96/2)-25;
+    console.log(wallY)
+    if(wallY>460){wallY=480}
+    console.log(wallY)
+    wallY = Math.round(wallY / wallgrid)*wallgrid;
+      wallX = Math.round(wallX / wallgrid)*wallgrid;
+      console.log(wallY)
     document.getElementById('overworld').innerHTML += `<img id="W${wallID}" src="object_frames/wall.jpeg">`;
     document.getElementById(`W${wallID}`).style.position = `fixed`;
     document.getElementById(`W${wallID}`).style.top = `${wallY}px`;
@@ -944,22 +988,16 @@ if(!placed && wallCount>0){
     document.getElementById(`W${wallID}`).style.zIndex=`23123123123123123`;
     walls[wallID] = [wallX,wallY,100,false]
   } else if (movedUp){
+    console.log('ass')
     wallID ++;
-    let wallY = positionY+100;
-    let wallX = positionX+(75);
+    let wallY = positionY-(96/2);
+    let wallX = positionX+(96/2)-25;
+    console.log(wallY)
     if(wallY>480){wallY=480}
-    document.getElementById('overworld').innerHTML += `<img id="W${wallID}" src="object_frames/wall.jpeg">`;
-    document.getElementById(`W${wallID}`).style.position = `fixed`;
-    document.getElementById(`W${wallID}`).style.top = `${wallY}px`;
-    document.getElementById(`W${wallID}`).style.left = `${wallX}px`;
-    document.getElementById(`W${wallID}`).style.width = `64px`;
-    document.getElementById(`W${wallID}`).style.zIndex=`23123123123123123`;
-    walls[wallID] = [wallX,wallY,100,false]
-  } else if (movedLeft){
-    wallID ++;
-    let wallY = positionY+(96/2);
-    let wallX = positionX-(70);
-    if(wallY>480){wallY===480}
+    console.log(wallY)
+    wallY = Math.round(wallY / wallgrid)*wallgrid;
+      wallX = Math.round(wallX / wallgrid)*wallgrid;
+      console.log(wallY)
     document.getElementById('overworld').innerHTML += `<img id="W${wallID}" src="object_frames/wall.jpeg">`;
     document.getElementById(`W${wallID}`).style.position = `fixed`;
     document.getElementById(`W${wallID}`).style.top = `${wallY}px`;
@@ -968,14 +1006,38 @@ if(!placed && wallCount>0){
     document.getElementById(`W${wallID}`).style.zIndex=`23123123123123123`;
     walls[wallID] = [wallX,wallY,100,false]
   } else if (movedRight){
+    console.log('ass')
     wallID ++;
-    let wallY = positionY+(96/2);
-    let wallX = positionX+100;
-    if(wallY>480){wallY===480}
+    let wallY = positionY+25;
+    let wallX = positionX+(75);
+    console.log(wallX)
+    if(wallY>480){wallY=480}
+    console.log(wallX)
+    wallY = Math.round(wallY / wallgridY)*wallgridY;
+      wallX = Math.round(wallX / wallgrid)*wallgrid;
+      console.log(wallY)
     document.getElementById('overworld').innerHTML += `<img id="W${wallID}" src="object_frames/wall.jpeg">`;
     document.getElementById(`W${wallID}`).style.position = `fixed`;
-    document.getElementById(`W${wallID}`).style.top = `${positionY+(96/2)}px`;
-    document.getElementById(`W${wallID}`).style.left = `${positionX+100}px`;
+    document.getElementById(`W${wallID}`).style.top = `${wallY}px`;
+    document.getElementById(`W${wallID}`).style.left = `${wallX}px`;
+    document.getElementById(`W${wallID}`).style.width = `64px`;
+    document.getElementById(`W${wallID}`).style.zIndex=`23123123123123123`;
+    walls[wallID] = [wallX,wallY,100,false]
+  } else if (movedLeft){
+    console.log('ass')
+    wallID ++;
+    let wallY = positionY+25;
+    let wallX = positionX-45;
+    console.log(wallY)
+    if(wallY>480){wallY=480}
+    console.log(wallY)
+    wallY = Math.round(wallY / wallgridY)*wallgridY;
+      wallX = Math.round(wallX / wallgrid)*wallgrid;
+      console.log(wallY)
+    document.getElementById('overworld').innerHTML += `<img id="W${wallID}" src="object_frames/wall.jpeg">`;
+    document.getElementById(`W${wallID}`).style.position = `fixed`;
+    document.getElementById(`W${wallID}`).style.top = `${wallY}px`;
+    document.getElementById(`W${wallID}`).style.left = `${wallX}px`;
     document.getElementById(`W${wallID}`).style.width = `64px`;
     document.getElementById(`W${wallID}`).style.zIndex=`23123123123123123`;
     walls[wallID] = [wallX,wallY,100,false]
@@ -1073,6 +1135,7 @@ function checkWallZombieCollision() {
      zombie[17] = 0;
 
     Object.keys(walls).forEach((wallName) => {
+      if(walls[wallName]){
       let wall = walls[wallName];
       let wallOBJ = document.getElementById(`W${wallName}`).getBoundingClientRect();
       let wallX = wall[0];
@@ -1086,7 +1149,7 @@ function checkWallZombieCollision() {
         if ((zY - wallY)<0){repulsionY = -1}else{repulsionY = 1}
         zombie[16] += repulsionX 
         zombie[17] += repulsionY 
-        wall[2] -= 0.005;
+        wall[2] -= 0.025;
         if(!wall[3]){
           wall[3] = true;
           setTimeout(function(){
@@ -1099,7 +1162,7 @@ function checkWallZombieCollision() {
           delete walls[wallName];
         }
         console.log(`${repulsionX},${repulsionY}`)
-      }
+      }}
     });
   });
 }
