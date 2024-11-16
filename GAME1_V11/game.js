@@ -37,7 +37,7 @@
     let bullets = {};
     let bulletIntervals = {};
     let startedBullets = [];
-    let shootingCooldown = 100;
+    let shootingCooldown = 80;
     let zombies = {};
     let zombieIntervals = [];
     let collidedZombies = {};
@@ -45,7 +45,7 @@
     let coinIntervals = [];
     let draining = false;
     let diedVar = false;
-    let bulletNum = 40;
+    let bulletNum = 30;
     let movedUp,movedDown,movedLeft,movedRight;
     let zombieSpeed = 2;
     let zombieLimit = 5;
@@ -265,7 +265,7 @@
       if(positionX<=280 && positionY<= 245 && positionY>=160){
         collisionLeft = true;
       }else{collisionLeft = false}*/
-    }
+    }/*
     function showEnterHouse(){
       document.getElementById('enter-house').style=""
     }      
@@ -295,7 +295,7 @@
         document.getElementById('overworld').style='';
         document.getElementById('world').style.backgroundImage="url(grass.png)"
       },1300)
-    }
+    }*/
     document.addEventListener('mousemove',function(event){
       mouseX = event.clientX;
       mouseY = event.clientY;
@@ -914,7 +914,7 @@ function controlBack(){
       <button id="controls" class="welcome-buttons" onclick="controls()">Controls</button>
       <button id="credit" class="welcome-buttons" onclick="credit()">Credit</button>
     </div>
-    <div id="version-info"><div>Version 1.1.3 </div> <button id="version-button" onclick="patch_notes()">Patch Notes</button></div>
+    <div id="version-info"><div>Version 1.1.4 </div> <button id="version-button" onclick="patch_notes()">Patch Notes</button></div>
   `
 }
 function credit(){
@@ -1102,10 +1102,10 @@ function checkWallBulletCollision(){
   let distance = ((dx**2)+(dy**2))**0.5;
   if(distance<36){
     if(walls[wallName][2]>0){       
-      clearInterval(bulletIntervals[bulletName]);
+      clearInterval(bullets[bulletName][7]);
       document.getElementById('overworld').removeChild(document.getElementById(`B${bulletName}`));
       delete bullets[bulletName];
-      delete bulletIntervals[bulletName];
+//      delete bulletIntervals[bulletName];
       walls[wallName][2] -= 10;
       document.getElementById(`W${wallName}`).style.opacity = `0.5`;
       setTimeout(function(){
@@ -1115,8 +1115,9 @@ function checkWallBulletCollision(){
     }
     if(walls[wallName][2]===0){
 //      clearInterval(bulletIntervals[bulletName]);
+clearInterval(bullets[bulletName][7]);
       delete bullets[bulletName];
-      delete bulletIntervals[bulletName];
+//      delete bulletIntervals[bulletName];
       document.getElementById('overworld').removeChild(document.getElementById(`W${wallName}`));
       delete walls[wallName];
     }
