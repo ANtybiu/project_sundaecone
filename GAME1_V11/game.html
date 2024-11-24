@@ -26,7 +26,7 @@
           <img class="health-potion" src="object_frames/health_potion.png" id="health-potion" onclick="addHealth()">
         <div id="health-potion-count" style="margin-right: 5px">1</div>
           <img class="wall" src="object_frames/wall.jpeg" width="40px" onclick="placeWall()">
-        <div id="wall-count" style="margin-right: 5px;">0</div>
+        <div id="wall-count" style="margin-right: 5px;">1</div>
           <img class="bullet-img" src="object_frames/bullet.png">
         <div id="bullet-count">30</div>
         </div>
@@ -153,18 +153,18 @@
       <button id="controls" class="welcome-buttons" onclick="controls()">Controls</button>
       <button id="credit" class="welcome-buttons" onclick="credit()">Credits</button>
     </div>
-    <div id="version-info"><div>Version 1.2.0</div><a href="patches.html" target="_blank"><button id="version-button">Patch Notes</button></a></div>
+    <div id="version-info"><div>Version 1.2.1</div><a href="patches.html" target="_blank"><button id="version-button">Patch Notes</button></a></div>
   </div>
   <div id="difficulty">
     <div id="difficulty-title">Please select your difficulty</div>
     <div id="difficulty-buttons-container">
       <div>
-        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop(0,0,50,0)">Easy</button></div>
-        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop(0.1,10,40,0)">Normal</button></div>
+        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop('easy')">Easy</button></div>
+        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop('normal')">Normal</button></div>
       </div>
       <div>
-        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop(0.25,20,30,1)">Hard</button></div>
-        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop(1,50,20,2)">Insane</button></div>
+        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop('hard')">Hard</button></div>
+        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop('insane')">Insane</button></div>
       </div>
       
       
