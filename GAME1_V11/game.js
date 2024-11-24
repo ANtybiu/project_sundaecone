@@ -48,7 +48,7 @@
     let coinIntervals = [];
     let draining = false;
     let diedVar = false;
-    let bulletNum = 30;
+    let bulletNum = 50;
     let movedUp,movedDown,movedLeft,movedRight;
     let zombieSpeed = 2;
     let zombieLimit = 5;
@@ -1486,6 +1486,7 @@ setInterval(function(){
     checkWallCharacterCollision();
     checkWallZombieCollision();
     checkWallBossBulletCollision();
+    checkWallZombieProjectileCollision()
 },50)
 
 function checkWallBossBulletCollision(){
@@ -1524,6 +1525,47 @@ function checkWallBossBulletCollision(){
 clearInterval(bossBulletIntervals[bbName]);
       delete bossBullets[bbName];
       if(bossBulletIntervals[bbName]){delete bossBulletIntervals[bbName]}
+//      delete bulletIntervals[bulletName];
+      document.getElementById('overworld').removeChild(document.getElementById(`W${wallName}`));
+      delete walls[wallName];
+    }
+    console.log(walls[wallName][2])
+  }})})
+}
+function checkWallZombieProjectileCollision(){
+  let wallHP = 'asdasd';
+  let wallhuh =`ez`;
+  Object.keys(walls).forEach((wallName) => {
+  let   wallX = walls[wallName][0]+32;
+  let   wallY = walls[wallName][1]+32;
+     wallHP = walls[wallName][2];
+  wallhuh=wallName;
+  Object.keys(zombieProjectiles).forEach((zID) => {
+  let  bulletX = zombieProjectiles[zID][0];
+  let  bulletY = zombieProjectiles[zID][1];
+  let dx = wallX -bulletX;
+  let dy = wallY - bulletY;
+  let distance = ((dx**2)+(dy**2))**0.5;
+  if(distance<45){
+    if(walls[wallName][2]>0){       
+      clearInterval(zombieProjectilesIntervals[zID]);
+      zombieProjectiles[zID][5] = true;
+      delete zombieProjectilesIntervals[zID]
+      document.getElementById('overworld').removeChild(document.getElementById(`zB${zID}`));
+      delete zombieProjectiles[zID];
+//      delete bulletIntervals[bulletName];
+      walls[wallName][2] -= 25;
+      document.getElementById(`W${wallName}`).style.opacity = `0.5`;
+      setTimeout(function(){
+        document.getElementById(`W${wallName}`).style.opacity = `1`;
+      },50)
+      
+    }
+    if(walls[wallName][2]===0){
+//      clearInterval(bulletIntervals[bulletName]);
+clearInterval(zombieProjectilesIntervals[zID]);
+      delete zombieProjectiles[zID];
+      if(zombieProjectilesIntervals[zID]){delete zombieProjectilesIntervals[zID]}
 //      delete bulletIntervals[bulletName];
       document.getElementById('overworld').removeChild(document.getElementById(`W${wallName}`));
       delete walls[wallName];
