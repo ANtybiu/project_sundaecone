@@ -1217,7 +1217,7 @@ function controlBack(){
     <div id="desc">Defend against zombie waves</div>
 
     <div id="welcome-buttons-container">
-      <button id="play" class="welcome-buttons" onclick="gameLoop();startGameLoop()">Play</button>
+      <button id="play" class="welcome-buttons" onclick="gameHardness()">Play</button>
       <button id="controls" class="welcome-buttons" onclick="controls()">Controls</button>
       <button id="credit" class="welcome-buttons" onclick="credit()">Credit</button>
     </div>
