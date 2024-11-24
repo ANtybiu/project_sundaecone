@@ -1221,7 +1221,7 @@ function controlBack(){
       <button id="controls" class="welcome-buttons" onclick="controls()">Controls</button>
       <button id="credit" class="welcome-buttons" onclick="credit()">Credit</button>
     </div>
-    <div id="version-info"><div>Version 1.2.1</div><a href="patches.html" target="_blank"><button id="version-button">Patch Notes</button></a> </div>
+    <div id="version-info"><div>Version 1.2.2</div><a href="patches.html" target="_blank"><button id="version-button">Patch Notes</button></a> </div>
   `
 }
 function credit(){
