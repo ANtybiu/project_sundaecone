@@ -347,3 +347,27 @@ height: 10px;
 .cont1{
   width:250px;
 }
+#game-paused-container{
+  position: fixed;
+  left: 37.4vw;
+  top: 20.5vh;
+  background-color: black;
+  opacity: 0.85;
+  color: white;
+  display: none;
+  align-items: center;
+  flex-direction: column;
+  padding: 25px;
+  z-index: 1984981073294810328471029387410983274192;
+
+}
+#game-paused{
+  font-weight: bold;
+  font-size: 48px;
+  margin-bottom:30px;
+}
+#game-paused-buttons{
+  display:flex;
+  flex-direction: column;
+  align-items:center
+}
