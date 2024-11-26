@@ -1160,7 +1160,7 @@ let time = 11
 let timeINV = 0;
 let bossCoinInterval;
 let newRound = false;
-let remainingTime = 10;
+let remainingTime = 12;
 let roundInterval;
 function roundManager(){
 if(gamePaused){return}
@@ -1190,11 +1190,14 @@ zombieLimit += 5;
   
 roundInterval = setInterval(()=>{
   if(!gamePaused){
-    if(remainingTime>0){
-    document.getElementById('round-container').innerHTML = `Round ${round} starting in ${remainingTime}s`;
+    console.log(remainingTime)
+    if(remainingTime>-1){
+      console.log('min')
+    document.getElementById('round-container').innerHTML = `Round ${round} starting in ${remainingTime-2}s`;
     remainingTime --;
     }
     if(remainingTime<=0){
+      console.log('hehe')
       zombieSpawned = 0;
       zombieKilled = 0;
       zombieSpeed += zombieSpeedRate;
@@ -1205,6 +1208,7 @@ roundInterval = setInterval(()=>{
       document.getElementById('round-container').innerHTML=`Round ${round}`;
       spawnZombie();
       clearInterval(roundInterval)
+      remainingTime = 12;
     }
   }
 },1000)
