@@ -154,18 +154,29 @@
       <button id="controls" class="welcome-buttons" onclick="controls()">Controls</button>
       <button id="credit" class="welcome-buttons" onclick="credit()">Credits</button>
     </div>
-    <div id="version-info"><div>Version 1.2.3</div><a href="patches.html" target="_blank"><button id="version-button">Patch Notes</button></a></div>
+    <div id="version-info"><div>Version 1.2.4</div><a href="patches.html" target="_blank"><button id="version-button">Patch Notes</button></a></div>
   </div>
+
+  <div id="game-paused-container">
+    <div id="game-paused">Game Paused</div>
+    <div id="game-paused-buttons">
+      <button class="welcome-buttons" style="margin-bottom:12px" onclick="controls(true)">Controls</button>
+      <a href="game.html"><button class="welcome-buttons" style="margin-bottom:12px">Main-menu</button></a>
+      <button class="welcome-buttons" style="margin-bottom:12px" onclick="pause('hehe')">Resume game</button>
+    </div>
+    <div id="game-info"><span style="font-size:22px">Difficulty: Easy</span><br><span style="font-size:22px;text-align: center;">Round: 69</span></div>
+  </div>
+
   <div id="difficulty">
     <div id="difficulty-title">Please select your difficulty</div>
     <div id="difficulty-buttons-container">
       <div>
-        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop('easy')">Easy</button></div>
-        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop('normal')">Normal</button></div>
+        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop('Easy')">Easy</button></div>
+        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop('Normal')">Normal</button></div>
       </div>
       <div>
-        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop('hard')">Hard</button></div>
-        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop('insane')">Insane</button></div>
+        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop('Hard')">Hard</button></div>
+        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop('Insane')">Insane</button></div>
       </div>
       
       
