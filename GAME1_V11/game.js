@@ -270,7 +270,6 @@ document.addEventListener('keyup', function (event) {
   }
 let pressed = false;
 document.addEventListener('keypress', function(event){
-  if(pressed){return pressed = false;}
   if(event.key){pressed = true; setTimeout(()=>{pressed = false},250)}
   if(event.key.toLowerCase() === 't'){tradePopUp()}
   if(event.key.toLowerCase() === 'e'){addHealth()}
