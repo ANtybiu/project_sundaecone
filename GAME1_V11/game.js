@@ -90,7 +90,7 @@ document.getElementById('difficulty').style.display=`none`;
 document.getElementById('overworld').style.display=`flex`
 gameLoop()
 gameStarted = true;
-if(difficulty === 'Tnsane'){
+if(difficulty === 'Insane'){
   zombieSpeedRate = 1;
   zombieCooldownRate = 50;
   zombieCooldown -= 10;
