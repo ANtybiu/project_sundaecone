@@ -667,6 +667,7 @@ function zombieBullet(zID){
    
 if(!zombieProjectiles[zID] && !gamePaused && zombies[zID]){
   document.getElementById(`Z${zID}`).src=`object_frames/zombie2.png`;
+  document.getElementById(`Z${currentID}`).style.width = `85px`;
 let X = zombies[zID][0];
 let Y = zombies[zID][1];
 let zX,zY;
