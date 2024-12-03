@@ -269,9 +269,6 @@ document.addEventListener('keydown', function (event) {
     },300)
     pause();}
   }
-  if(event.key === 'v'){
-    place_turret();
-  }
 });
 let gayed = false;
 document.addEventListener('keyup', function (event) {
