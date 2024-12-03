@@ -553,7 +553,7 @@ if(Math.random()<buffedZombieSpawnChance && zombieID !== 1  && miniBosses<miniBo
   miniBosses ++;
   zombies[currentID][21] = true;
   zombies[currentID][20] = setTimeout(() => {
-    document.getElementById(`Z${currentID}`).src=`object_frames/zombie2.png`
+    document.getElementById(`Z${currentID}`).src=`object_frames/zombie2.png`;
     zombieBullet(currentID);
     document.getElementById(`Z${currentID}`).style.width = `85px`;
     zombies[currentID][12] = 300;
@@ -667,8 +667,9 @@ spawnZombie();
 }
 
 function zombieBullet(zID){
-  
+   
 if(!zombieProjectiles[zID] && !gamePaused && zombies[zID]){
+  document.getElementById(`Z${zID}`).src=`object_frames/zombie2.png`;
 let X = zombies[zID][0];
 let Y = zombies[zID][1];
 let zX,zY;
