@@ -48,7 +48,7 @@ let coinObject = {};
 let coinIntervals = [];
 let draining = false;
 let diedVar = false;
-let bulletNum = 500;
+let bulletNum = 50;
 let movedUp,movedDown,movedLeft,movedRight;
 let zombieSpeed = 2;
 let zombieLimit = 5;
