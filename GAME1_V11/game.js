@@ -914,9 +914,57 @@ let debugOBJ = {};
 let debugOBJINDEX = 0
 let projectileSpeedChanged = false;
 setInterval(function () {
-asshole();
-
-}, 50);
+  asshole();
+  
+  if (bulletID >= 50 && !cum) {
+  removeShoot = false;
+  cum = true;
+  
+  setTimeout(function () {
+    console.log('lol');
+    bulletID = -1;
+    cum = false;
+    removeShoot = true;
+    let sorryBullet = 0;
+  
+    Object.keys(bullets).forEach((bulletName) => {
+      let bulletElement = document.getElementById(`B${bulletName}`)
+        clearInterval(bulletIntervals[bulletName]);
+        if (bulletElement) {
+          document.getElementById('overworld').removeChild(bulletElement);
+          sorryBullet ++;
+          anime.remove(`#B${bulletName}`);
+        }
+        anime.remove(`#B${bulletName}`);
+        anime.remove(`#B${bulletName}`);
+        anime.remove(`#B${bulletName}`);
+        anime.remove(`#B${bulletName}`);
+        anime.remove(`#B${bulletName}`);
+        anime.remove(`#B${bulletName}`);
+        anime.remove(`#B${bulletName}`);
+        anime.remove(`#B${bulletName}`);
+        anime.remove(`#B${bulletName}`);
+        anime.remove(`#B${bulletName}`);
+        
+        anime.remove(`#B${bulletName}`);
+        anime.remove(`#B${bulletName}`);
+        delete bulletIntervals[bulletName];
+        anime.remove(`#B${bulletName}`);
+        anime.remove(`#B${bulletName}`);
+        anime.running.forEach((animation) => {
+          const targets = animation.animatables.map((a) => a.target);
+          anime.remove(targets);
+      });
+        delete bulletIntervals[bulletName];
+        delete bullets[bulletName]
+      
+    });
+  
+    bulletNum += sorryBullet;
+  }, 100);
+  }
+  }, 90);
+  
 function help(bulletName){
   console.log(bulletName)
   if(bullets[bulletName]){
