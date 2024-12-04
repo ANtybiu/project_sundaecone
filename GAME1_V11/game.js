@@ -572,7 +572,7 @@ let zHealth = 100;
 let zState = 'normal';
 let currentID = zombieID
 zombies[zombieID] = [zombieX,zombieY,zombieID,z_velocityX,z_velocityY,false,Math.random()*1000,32,vectorX,'',vectorY,'',zHealth,Math.random(),Math.random(),false,'','',zombieSpeed,zState,'',false,zHealth];
-if(Math.random()<buffedZombieSpawnChance && zombieID !== 1  && miniBosses<miniBossLimit && round %bossRounds !== 0){
+if(Math.random()<buffedZombieSpawnChance && zombieID !== 1  && miniBosses<miniBossLimit && round %bossRounds !== 0 && round>1){
   console.log('hey')
   miniBosses ++;
   zombies[currentID][21] = true;
@@ -584,7 +584,7 @@ if(Math.random()<buffedZombieSpawnChance && zombieID !== 1  && miniBosses<miniBo
     zombies[currentID][22] = 300;
   }, zombieBulletCooldown);
 }
-else if(Math.random()<dumbZombieSpawnRate && zombieID !== 1 && round %bossRounds !== 0){
+else if(Math.random()<dumbZombieSpawnRate && zombieID !== 1 && round %bossRounds !== 0 && round>1){
   zombies[currentID][20] = setTimeout(() => {
     console.log('lol')
     document.getElementById(`Z${currentID}`).src=`object_frames/zombie4.png`;
