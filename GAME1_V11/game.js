@@ -60,7 +60,7 @@ let tradeopen;
 let wallID = -1;
 let walls = {};
 let zombieCollided,placed = false;
-let wallCount = 1000;
+let wallCount = 1;
 let start = false;
 let removeShoot = true;
 let Btime = 16;
