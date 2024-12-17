@@ -165,11 +165,11 @@
     <div id="desc">Defend against zombie waves</div>
 
     <div id="welcome-buttons-container">
-      <button id="play" class="welcome-buttons" onclick="gameHardness()">Play</button>
+      <button id="play" class="welcome-buttons" onclick="gameHardness();checkSaveFiles();">Play</button>
       <button id="controls" class="welcome-buttons" onclick="controls()">Controls</button>
       <button id="credit" class="welcome-buttons" onclick="credit()">Credits</button>
     </div>
-    <div id="version-info"><div>Version 1.3.2</div><a href="patches.html" target="_blank"><button id="version-button">Patch Notes</button></a></div>
+    <div id="version-info"><div>Version 1.3.3</div><a href="patches.html" target="_blank"><button id="version-button">Patch Notes</button></a></div>
   </div>
 
   <div id="almanac-page-container" style="display: none;">
@@ -228,7 +228,7 @@
       <a href="game.html"><button class="welcome-buttons" style="margin-bottom:12px">Main-menu</button></a>
       <button class="welcome-buttons" style="margin-bottom:12px" onclick="pause('hehe')">Resume game</button>
     </div>
-    <div id="game-info"><span style="font-size:22px">Difficulty: Easy</span><br><span style="font-size:22px;text-align: center;">Round: 69</span></div>
+    <div id="game-info"><span style="font-size:22px">Difficulty: Easy</span><br><span style="font-size:22px;text-align: center;">Round: 69</span><br>Log Performance &middot; <button onclick="logPerformance('on')">On</button></div>
   </div>
 
   <div id="difficulty">
@@ -236,12 +236,12 @@
     <div id="difficulty-title">Please select your difficulty</div>
     <div id="difficulty-buttons-container">
       <div>
-        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop('Easy')">Easy</button></div>
-        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop('Normal')">Normal</button></div>
+        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop('Easy',1)">Easy</button></div>
+        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop('Normal',1)">Normal</button></div>
       </div>
       <div>
-        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop('Hard')">Hard</button></div>
-        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop('Insane')">Insane</button></div>
+        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop('Hard',1)">Hard</button></div>
+        <div><button class="difficulty-buttons" onclick="gameLoop();startGameLoop('Insane',1)">Insane</button></div>
       </div>
       <div>
         <a href="game.html"><button style="position:fixed;top:0;right:0;width: 250px;
@@ -256,6 +256,13 @@
       
     </div>
     
+  </div>
+  <div id="save-files" style="display:none;">
+    <div id="difficulty-title">Save file detected.</div>
+    <div id="difficulty-buttons-container">
+        <div><button class="difficulty-buttons" onclick="startGameLoop()">Play save file</button></div>
+        <div><button class="difficulty-buttons" onclick="document.getElementById('difficulty').style.display=`grid`;document.getElementById('save-files').style.display=`none`;clearSaves();change()">New save file</button></div>
+      </div>
   </div>
   <div id="trade-popup" style="display:none;">
     <div id="trade-prev" style="cursor: pointer;"><strong>&lt;</strong></div>
