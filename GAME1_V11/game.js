@@ -90,12 +90,28 @@ let turretProjectiles = {};
 let turretProjectilesID = 0;
 let turretCooldown = 100;
 let dumbZombieSpawnRate = 0.05;
+let playerData = {
+}
+let wallData = {
+
+};
+let gameDifficulty1;
 //bobs or vagana which ever will it be sit the fuck down t-series im here to spill the real tea you tryna get through me for spot of number 1 but you india you lose so they think you never won when im thru with you your gonna be completely fucking done else we only just begun i rate you 0 by bitch gone so come on t series looking hungry for some drama here let me serve you bitch lasagna
 
-function startGameLoop(difficulty){
+function startGameLoop(difficulty,state){
   gameDifficulty = difficulty;
+  gameDifficulty1 = difficulty;
 document.getElementById('difficulty').style.display=`none`;
-document.getElementById('overworld').style.display=`flex`
+document.getElementById('overworld').style.display=`flex`;
+let storedData = localStorage.getItem('playerData');
+if(storedData && !state){
+let  userData = JSON.parse(storedData);
+console.log(userData.diff)
+  difficulty = userData.diff;
+  gameDifficulty = difficulty;
+  gameDifficulty1 = difficulty;
+}
+checkSaveFiles(state);
 gameLoop()
 gameStarted = true;
 if(difficulty === 'Insane'){
@@ -107,7 +123,7 @@ if(difficulty === 'Insane'){
   priceIncrement = 2;
   bossHealth = 5000;
   bossRounds = 3;
-  zombieSpeed = 4;
+  zombieSpeed = 2;
   zombieLimit = 10;
   bulletNum = 20;
   shootingCooldown = 150;
@@ -127,7 +143,7 @@ if(difficulty === 'Hard'){
   priceIncrement = 1;
   bossHealth = 4000;
   bossRounds = 4;
-  zombieSpeed = 3;
+  zombieSpeed = 1.5;
   zombieLimit = 5;
   bulletNum = 30;
   shootingCooldown = 100;
@@ -153,23 +169,73 @@ if(difficulty === 'Normal'){
   miniBossLimit = 3;
   dumbZombieSpawnRate = 0.05;
 }
+if(storedData && !state){
+ let userData = JSON.parse(storedData);
+  zombieSpeedRate = userData.zombieSpeedRate;
+  zombieCooldownRate = userData.zombieCooldownRate;
+  zombieCooldown = userData.zombieCooldown;
+  zombieBulletSpeed = userData.zombieBulletSpeed;
+  zombieBulletCooldown = userData.zombieBulletCooldown;
+  priceIncrement = userData.priceIncrement;
+  bossHealth = userData.bossHealth;
+  bossRounds = userData.bossRounds;
+  zombieSpeed = userData.zombieSpeed;
+  zombieLimit = userData.zombieLimit;
+  bulletNum = userData.bulletNum;
+  shootingCooldown = userData.shootingCooldown;
+  coinCount = userData.coinCount;
+  manaPotionCount = userData.manaPotionCount;
+  healthPotionCount = userData.healthPotionCount;
+  buffedZombieSpawnChance = userData.buffedZombieSpawnChance;
+  miniBossLimit = userData.miniBossLimit;
+  dumbZombieSpawnRate = userData.dumbZombieSpawnRate;
+  round = userData.round;
+  wallCount = userData.wall;
+  healthCount = userData.health;
+  manaCount = userData.mana;
+  wallCount = userData.wall;
+  bulletNum = userData.bullet;
+  walls = userData.wallData;
+  Object.keys(walls).forEach((wallNama)=>{
+    wallID ++;
+    let wallY = walls[wallNama][1];
+    let wallX = walls[wallNama][0];
+    document.getElementById('overworld').innerHTML += `<img id="W${wallID}" src="object_frames/wall.jpeg">`;
+    document.getElementById(`W${wallID}`).style.position = `fixed`;
+    document.getElementById(`W${wallID}`).style.top = `${wallY}px`;
+    document.getElementById(`W${wallID}`).style.left = `${wallX}px`;
+    document.getElementById(`W${wallID}`).style.width = `64px`;
+    document.getElementById(`W${wallID}`).style.zIndex=`23123123123123123`;
+  })
+}
 tradeSwitch('mana');
 tradeSwitch('health');
 tradeSwitch('wall');
 tradeSwitch('bullet');
 document.getElementById('coin-count').innerHTML = `${coinCount}`;
 document.getElementById('mana-cube-count').innerHTML = `${manaPotionCount}`;
-document.getElementById('health-potion-count').innerHTML = `${healthPotionCount}`
-document.getElementById('bullet-count').innerHTML = `${bulletNum}`
+document.getElementById('health-potion-count').innerHTML = `${healthPotionCount}`;
+document.getElementById('bullet-count').innerHTML = `${bulletNum}`;
+document.getElementById('round-container').innerHTML=`Round ${round}`;
 }
 function gameLoop() {
-
+  document.getElementById(`save-files`).style.display = `none`;
+  document.getElementById(`difficulty`).style.display = `none`;
 spawnZombie();
 
 }
 
+function checkSaveFiles(state){
+  let storedData = localStorage.getItem('playerData');
+  if(storedData && !state){
+    document.getElementById(`save-files`).style.display = `grid`;
+    document.getElementById(`difficulty`).style.display = `none`;
+  }
+}
 
-
+function clearSaves(){
+  localStorage.removeItem('playerData');
+}
 function updateCharacter() {
   if (walkingUp && positionY > 0 && !collisionUp && !houseUp && !gamePaused) {
     positionY -= movementSpeed;
@@ -325,11 +391,21 @@ function pause(a){
   if(!gameStarted){return}
   if(gamePaused){
   document.getElementById('game-paused-container').style.display = `flex`;
+  document.getElementById('game-paused-container').style.paddingBottom = `-10px`
   document.getElementById('game-info').innerHTML=
   `
   <span style="font-size:22px">Difficulty: ${gameDifficulty}</span>
   <br>
-  <span style="font-size:22px;margin-left:30px">Round: ${round}</span>`
+  <span style="font-size:22px;margin-left:30px">Round: ${round}</span>
+  <br><button onclick="logPerformance('on')" style="width: 125px;
+  height: 30px;
+  border: 2.5px gray solid;
+  background-color: rgb(240, 240, 240);
+  color: black;
+  font-family: Pixelify Sans;
+  font-size: 12px;
+  cursor: pointer;">Log performance</button>
+  `
 }
   if(!gamePaused){
     frameOne('up');
@@ -616,10 +692,9 @@ zombieIntervals.push(
         update: ()=>{
           if(!gamePaused){
             if(round % bossRounds === 0){
-              setInterval(()=>{
-                if(Math.random()<0.1)
+                if(Math.random()<0.1){
                 spawnBossBullet(zombieID);
-              },100)
+                }
             }
           if(zombies[zID] !== undefined){
           if(zombies[zID][1]>455){zombies[zID][4]=-1; };if(zombies[zID][1]<0){zombies[zID][4]=1};
@@ -733,17 +808,18 @@ Object.keys(zombieProjectiles).forEach((zID)=>{
     })
 
 }}
+let bossHasShot = false;
 setInterval(()=>{checkZombieBulletCharCollision()},50)
 function spawnBossBullet(zID){
-while(bossBulletID<7 && !bossKilled && !gamePaused){
-if(bossBulletID<7 && round % bossRounds ===0 && !gamePaused){
+if(bossBulletID<7 && round % bossRounds ===0 && !gamePaused && !bossHasShot && zombies[zID]){
 bossBulletID ++;
+if(bossBulletID>=7){bossHasShot = true;}
 let bpX = zombies[zID][0]+64;
 let bpY = zombies[zID][1]+64;
 let angles = [0,Math.PI/4,Math.PI/2,(3*Math.PI)/4,Math.PI,(5/4)*Math.PI,(3/2)*Math.PI,(7/4)*Math.PI,2*Math.PI];
 let angleChosen,vbpX,vbpY;
 angleChosen = angles[bossBulletID];
-document.getElementById('overworld').innerHTML += `<img src="object_frames/bullet.png" id="BB${bossBulletID}" class="bullet">`;
+document.getElementById('overworld').innerHTML += `<img src="object_frames/bullet.png" id="BB${bossBulletID}" class="Bossbullet">`;
 document.getElementById(`BB${bossBulletID}`).style.left = `${bpX}px`;
 document.getElementById(`BB${bossBulletID}`).style.top = `${bpY}px`;
 document.getElementById(`BB${bossBulletID}`).style.transform = `rotate(${angleChosen*(180/Math.PI)}deg)`
@@ -751,19 +827,25 @@ bossBullets[bossBulletID] = [bpX,bpY,vbpX,vbpY,angleChosen,false];
 bossBullets[bossBulletID][2] = 15*Math.cos(bossBullets[bossBulletID][4]);
 bossBullets[bossBulletID][3] = 15*Math.sin(bossBullets[bossBulletID][4]);
 let BBID = bossBulletID;
-bossBulletIntervals[bossBulletID] = setInterval(()=>{movebbb(BBID)},20)
-}}
+movebbb(BBID)
+}
 }
 function clearBB(){
 setInterval(()=>{
   if(!gamePaused){
-  Object.keys(bossBulletIntervals).forEach((bossBulletName)=>{
-    clearInterval(bossBulletIntervals[bossBulletName]);
-    delete bossBullets[bossBulletName];
-    delete bossBulletIntervals[bossBulletName];
-    if(document.getElementById(`BB${bossBulletName}`)){
-    document.getElementById('overworld').removeChild(document.getElementById(`BB${bossBulletName}`));}
-  })
+    bossHasShot = false;
+    anime.running.forEach((animation) => {
+      animation.animatables.forEach((animatable) => {
+          const target = animatable.target;
+          if (target.classList && target.classList.contains('Bossbullet')) {
+              anime.remove(target);
+              console.log(target.id);
+              if(document.getElementById(`${target.id}`)){
+              document.getElementById('overworld').removeChild(document.getElementById(`${target.id}`))
+              }
+          }
+      });
+  });
   bossBullets = {};
   bossBulletIntervals = {};
   bossBulletID = -1;}
@@ -772,14 +854,20 @@ setInterval(()=>{
 }
 clearBB();
 function movebbb(BBID){
+  anime({
+    targets:`#BB${BBID}`,
+    top:`${bossBullets[BBID][1]}px`,
+    left: `${bossBullets[BBID][0]}px`,
+    loop:true,
+    duration:20,
+    update:()=>{
+      if(!gamePaused && bossBullets[BBID]){
+      bossBullets[BBID][0] += bossBullets[BBID][2];
+      bossBullets[BBID][1] += bossBullets[BBID][3];
+      anime.set(`#BB${BBID}`,{
+        top:`${bossBullets[BBID][1]}px`,
+        left: `${bossBullets[BBID][0]}px`,})}}})}
 
-if(!gamePaused){
-  bossBullets[BBID][0] += bossBullets[BBID][2];
-  bossBullets[BBID][1] += bossBullets[BBID][3];
-  document.getElementById(`BB${BBID}`).style.left = `${bossBullets[BBID][0]}px`;
-  document.getElementById(`BB${BBID}`).style.top = `${bossBullets[BBID][1]}px`;
-}
-}
 function checkBBCharacterCollision(){
   if(!gamePaused){
 Object.keys(bossBullets).forEach((bbName)=>{
@@ -800,7 +888,7 @@ if(BBDraining)return;
 if(!BBDraining && !gamePaused){
   console.log('cum')
   BBDraining = true
-clearInterval(bossBulletIntervals[bbName]);
+anime.remove(`#BB${bbName}`)
 healthCount -= 10;
 document.getElementById('character').style.opacity = `0.5`;
 document.getElementById('health-bar').style.width = `${(healthCount/100)*400}px`;
@@ -1081,7 +1169,8 @@ function died(){
 if (healthCount <= 0){
 diedVar = true
 document.getElementById('overworld').style.display=`none`;
-document.getElementById('game-over-container').style.display=`flex`  
+document.getElementById('game-over-container').style.display=`flex`;
+localStorage.removeItem('playerData')  
 }
 }
 setInterval(died,250)
@@ -1272,6 +1361,41 @@ roundInterval = setInterval(()=>{
             }
         });
     });
+    console.log(gameDifficulty)
+    playerData = {
+      level: 0,
+      xp: 0,
+      position: [positionX,positionY],
+      bullet: bulletNum,
+      coins: coinCount,
+      hPotionCount: healthPotionCount,
+      mPotionCount: manaPotionCount,
+      health: healthCount,
+      mana: manaCount,
+      wall: wallCount,
+      diff: gameDifficulty1,
+      round: round,
+      zombieSpeedRate: zombieSpeedRate,
+      zombieCooldownRate :zombieCooldownRate,
+      zombieCooldown: zombieCooldown,
+      zombieBulletSpeed: zombieBulletSpeed,
+      zombieBulletCooldown: zombieBulletCooldown,
+      priceIncrement: priceIncrement,
+      bossHealth: bossHealth,
+      bossRounds: bossRounds,
+      zombieSpeed: zombieSpeed,
+      zombieLimit: zombieLimit,
+      bulletNum: bulletNum,
+      shootingCooldown: shootingCooldown,
+      coinCount: coinCount,
+      manaPotionCount: manaPotionCount,
+      healthPotionCount: healthPotionCount,
+      buffedZombieSpawnChance: buffedZombieSpawnChance,
+      miniBossLimit: miniBossLimit,
+      dumbZombieSpawnRate: dumbZombieSpawnRate,
+      wallData: walls
+    }
+    localStorage.setItem('playerData', JSON.stringify(playerData));
       if(zombieCooldown>50){
       zombieCooldown -= zombieCooldownRate;
       }
@@ -1373,7 +1497,7 @@ document.getElementById('welcome').innerHTML = `
   <button id="controls" class="welcome-buttons" onclick="controls()">Controls</button>
   <button id="credit" class="welcome-buttons" onclick="credit()">Credit</button>
 </div>
-<div id="version-info"><div>Version 1.3.2</div><a href="patches.html" target="_blank"><button id="version-button">Patch Notes</button></a> </div>
+<div id="version-info"><div>Version 1.3.3</div><a href="patches.html" target="_blank"><button id="version-button">Patch Notes</button></a> </div>
 `}
 }
 function credit(){
@@ -1503,6 +1627,7 @@ let tempCollisionUp = false;
 let tempCollisionLeft = false;
 let tempCollisionRight = false;
 Object.keys(walls).forEach((wallName) => {
+console.log(wallName)
 let wallX = walls[wallName][0] + 32;
 let wallY = walls[wallName][1] + 32;
 let dy = (positionY + (96 / 2)) - wallY;
@@ -1589,7 +1714,7 @@ let intendedVelocityY = zombie[4]
  zombie[17] = 0;
 
 Object.keys(walls).forEach((wallName) => {
-  if(walls[wallName]){
+  if(walls[wallName] && document.getElementById(`W${wallName}`)){
   let wall = walls[wallName];
   let wallOBJ = document.getElementById(`W${wallName}`).getBoundingClientRect();
   let wallX = wall[0];
@@ -1597,6 +1722,7 @@ Object.keys(walls).forEach((wallName) => {
   let limit = 32;
   if(round % bossRounds ===0){limit = 64;}
   if (zX + intendedVelocityX < wallX + wallOBJ.width &&  zX + limit + intendedVelocityX > wallX && zY+intendedVelocityY < wallY + wallOBJ.height &&  zY + limit + intendedVelocityY > wallY) {
+    console.log(bossRounds)
     if(round % bossRounds === 0){document.getElementById('overworld').removeChild(document.getElementById(`W${wallName}`));
     delete walls[wallName];}else{
       console.log('bedugging')
@@ -2110,3 +2236,32 @@ function closeTurretPopUp(){
 setInterval(()=>{
   closeTurretPopUp()
 },500)
+
+let loggedPerformance = false;
+let oldTime = performance.now();
+setInterval(()=>{
+if(loggedPerformance){
+  let performance1 = Math.round(performance.now()-oldTime);
+  let state,lag,flag;
+  if(performance1<=100){
+    state = 'NO LAG';flag='lightgreen'
+  } else if(performance1<=125){
+    state = 'UNOTICABLE LAG';flag='lightgreen'
+  } else if(performance1<=150){
+    state = 'MINOR LAG';flag='green'
+  } else if(performance1<=175){
+    state = 'NOTICABLE LAG';flag='yellow'
+  } else if(performance1<=200){
+    state = 'BAD LAG';flag='orange'
+  } else {state = 'SEVERE LAG';flag='red'}
+  if(performance1 <100){lag = 0}else{lag = performance1-100}
+  console.log(`%cLag: ${lag}ms`,`background:${flag};`);
+  oldTime = performance.now()
+}
+},100)
+setInterval(()=>{
+  console.clear()
+},1000000)
+function logPerformance(){
+  loggedPerformance = !loggedPerformance;
+}
