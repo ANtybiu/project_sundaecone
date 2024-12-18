@@ -90,6 +90,7 @@ let turretProjectiles = {};
 let turretProjectilesID = 0;
 let turretCooldown = 100;
 let dumbZombieSpawnRate = 0.05;
+let saveNumber;
 let playerData = {
 }
 let wallData = {
@@ -98,20 +99,12 @@ let wallData = {
 let gameDifficulty1;
 //bobs or vagana which ever will it be sit the fuck down t-series im here to spill the real tea you tryna get through me for spot of number 1 but you india you lose so they think you never won when im thru with you your gonna be completely fucking done else we only just begun i rate you 0 by bitch gone so come on t series looking hungry for some drama here let me serve you bitch lasagna
 
-function startGameLoop(difficulty,state){
+function startGameLoop(difficulty,saveNum){
+  saveNumber = `save${saveNum}`
   gameDifficulty = difficulty;
   gameDifficulty1 = difficulty;
 document.getElementById('difficulty').style.display=`none`;
 document.getElementById('overworld').style.display=`flex`;
-let storedData = localStorage.getItem('playerData');
-if(storedData && !state){
-let  userData = JSON.parse(storedData);
-console.log(userData.diff)
-  difficulty = userData.diff;
-  gameDifficulty = difficulty;
-  gameDifficulty1 = difficulty;
-}
-checkSaveFiles(state);
 gameLoop()
 gameStarted = true;
 if(difficulty === 'Insane'){
@@ -169,8 +162,138 @@ if(difficulty === 'Normal'){
   miniBossLimit = 3;
   dumbZombieSpawnRate = 0.05;
 }
-if(storedData && !state){
- let userData = JSON.parse(storedData);
+tradeSwitch('mana');
+tradeSwitch('health');
+tradeSwitch('wall');
+tradeSwitch('bullet');
+document.getElementById('coin-count').innerHTML = `${coinCount}`;
+document.getElementById('mana-cube-count').innerHTML = `${manaPotionCount}`;
+document.getElementById('health-potion-count').innerHTML = `${healthPotionCount}`;
+document.getElementById('bullet-count').innerHTML = `${bulletNum}`;
+document.getElementById('round-container').innerHTML=`Round ${round}`;
+}
+function gameLoop() {
+  document.getElementById(`save-files`).style.display = `none`;
+  document.getElementById(`difficulty`).style.display = `none`;
+spawnZombie();
+}
+
+setInterval(() => {
+  let userData1 = localStorage.getItem('playerData')
+let savedData = JSON.parse(userData1);
+  console.log(savedData)
+}, 2500);
+
+function checkSaves(){
+  let saveNom;
+  let savedData;
+  let userData1 = localStorage.getItem('playerData')
+  if(userData1){
+    let userData;
+    savedData = JSON.parse(userData1);
+    if(savedData){
+    if(savedData.save1){
+       userData = savedData.save1;
+       saveNom = 1;
+       document.getElementById(`save${saveNom}`).innerHTML = `
+      <div class="save-icon"><img src="save_icon.png"></div>
+      <div class="save-info">
+        <div class="save-title"><input placeholder="Save 1" class="save-name"></div>
+        <div class="save-info-2">
+          <div class="save-info-settings">
+            <div class="save-diff">Difficulty:${userData.diff}</div>
+            <div class="save-round">Round:${userData.round}</div>
+          </div>
+          <div class="save-info-stats">
+            <div class="save-play-button"><button class="save-buttons" onclick="playSaves(${saveNom})">Play</button></div>
+            <div class="save-delete-button"><button class="save-buttons" onclick="deleteSaves(${saveNom})">Delete</button></div>
+          </div>
+        </div>
+      </div>
+        `
+    }
+    if(savedData.save2){
+      userData = savedData.save2
+      saveNom = 2;
+      document.getElementById(`save${saveNom}`).innerHTML = `
+      <div class="save-icon"><img src="save_icon.png"></div>
+      <div class="save-info">
+        <div class="save-title"><input placeholder="Save 1" class="save-name"></div>
+        <div class="save-info-2">
+          <div class="save-info-settings">
+            <div class="save-diff">Difficulty:${userData.diff}</div>
+            <div class="save-round">Round:${userData.round}</div>
+          </div>
+          <div class="save-info-stats">
+            <div class="save-play-button"><button class="save-buttons" onclick="playSaves(${saveNom})">Play</button></div>
+            <div class="save-delete-button"><button class="save-buttons" onclick="deleteSaves(${saveNom})">Delete</button></div>
+          </div>
+        </div>
+      </div>
+        `
+    }
+    if(savedData.save3 && !checked3){
+      userData = savedData.save3;
+      saveNom = 3;
+      document.getElementById(`save${saveNom}`).innerHTML = `
+      <div class="save-icon"><input placeholder="Save 1" class="save-name"></div>
+      <div class="save-info">
+        <div class="save-title">Save ${saveNom}</div>
+        <div class="save-info-2">
+          <div class="save-info-settings">
+            <div class="save-diff">Difficulty:${userData.diff}</div>
+            <div class="save-round">Round:${userData.round}</div>
+          </div>
+          <div class="save-info-stats">
+            <div class="save-play-button"><button class="save-buttons" onclick="playSaves(${saveNom})">Play</button></div>
+            <div class="save-delete-button"><button class="save-buttons" onclick="deleteSaves(${saveNom})">Delete</button></div>
+          </div>
+        </div>
+      </div>
+        `
+    }
+  }
+  console.log(savedData)
+  console.log(userData)
+  }
+}
+checkSaves();
+let saveNum2;
+function createSave(savenom){
+  saveNumber = `save${savenom}`;
+  saveNum2 = saveNumber
+  document.getElementById('save-files').style.display = `none`;
+  document.getElementById('difficulty').style.display = `grid`;
+}
+
+function deleteSaves(delSaveNumber){
+  let save = `save${delSaveNumber}`
+  let userData = JSON.parse(localStorage.getItem('playerData'));
+  delete userData.save;
+  localStorage.removeItem('playerData')
+  document.getElementById(save).innerHTML = `
+      <div class="save-icon"><img src="save_icon.png"></div>
+      <div class="save-info">
+        <div class="save-title">Save ${delSaveNumber}</div>
+        <div class="save-info-2">
+          <div class="save-info-settings">
+            <div class="save-diff">Difficulty:-</div>
+            <div class="save-round">Round:-</div>
+          </div>
+          <div class="save-info-stats">
+            <div class="save-play-button"><button class="save-buttons" onclick="createSave(${delSaveNumber})">Create</button></div>
+          </div>
+        </div>
+      </div>
+  `
+}
+function playSaves(sN){
+  let savetypoe = `save${sN}`
+  saveNum2 = savetypoe;
+  let userDataa = JSON.parse(localStorage.getItem('playerData'));
+  let userData = userDataa[savetypoe];
+  gameDifficulty = userData.diff;
+  gameDifficulty1 = userData.diff;
   zombieSpeedRate = userData.zombieSpeedRate;
   zombieCooldownRate = userData.zombieCooldownRate;
   zombieCooldown = userData.zombieCooldown;
@@ -207,34 +330,20 @@ if(storedData && !state){
     document.getElementById(`W${wallID}`).style.width = `64px`;
     document.getElementById(`W${wallID}`).style.zIndex=`23123123123123123`;
   })
-}
-tradeSwitch('mana');
-tradeSwitch('health');
-tradeSwitch('wall');
-tradeSwitch('bullet');
-document.getElementById('coin-count').innerHTML = `${coinCount}`;
-document.getElementById('mana-cube-count').innerHTML = `${manaPotionCount}`;
-document.getElementById('health-potion-count').innerHTML = `${healthPotionCount}`;
-document.getElementById('bullet-count').innerHTML = `${bulletNum}`;
-document.getElementById('round-container').innerHTML=`Round ${round}`;
-}
-function gameLoop() {
+  document.getElementById('coin-count').innerHTML = `${coinCount}`;
+  document.getElementById('mana-cube-count').innerHTML = `${manaPotionCount}`;
+  document.getElementById('health-potion-count').innerHTML = `${healthPotionCount}`;
+  document.getElementById('bullet-count').innerHTML = `${bulletNum}`;
+  document.getElementById('round-container').innerHTML=`Round ${round}`;
   document.getElementById(`save-files`).style.display = `none`;
   document.getElementById(`difficulty`).style.display = `none`;
-spawnZombie();
-
+  document.getElementById('overworld').style.display=`flex`;
+  document.getElementById('wall-count').innerHTML = `${wallCount}`
+  spawnZombie();
 }
-
-function checkSaveFiles(state){
-  let storedData = localStorage.getItem('playerData');
-  if(storedData && !state){
-    document.getElementById(`save-files`).style.display = `grid`;
-    document.getElementById(`difficulty`).style.display = `none`;
-  }
-}
-
-function clearSaves(){
-  localStorage.removeItem('playerData');
+function showSaves(){
+  document.getElementById('welcome').style.display=`none`;
+  document.getElementById('save-files').style.display=`grid`;
 }
 function updateCharacter() {
   if (walkingUp && positionY > 0 && !collisionUp && !houseUp && !gamePaused) {
@@ -388,13 +497,13 @@ setInterval(function(){
 
 function pause(a){
   if(a === 'hehe'){gamePaused = !gamePaused}
-  if(!gameStarted){return}
   if(gamePaused){
+    console.log('hi')
   document.getElementById('game-paused-container').style.display = `flex`;
   document.getElementById('game-paused-container').style.paddingBottom = `-10px`
   document.getElementById('game-info').innerHTML=
   `
-  <span style="font-size:22px">Difficulty: ${gameDifficulty}</span>
+  <span style="font-size:22px">Difficulty: ${gameDifficulty1}</span>
   <br>
   <span style="font-size:22px;margin-left:30px">Round: ${round}</span>
   <br><button onclick="logPerformance('on')" style="width: 125px;
@@ -1361,41 +1470,47 @@ roundInterval = setInterval(()=>{
             }
         });
     });
-    console.log(gameDifficulty)
-    playerData = {
-      level: 0,
-      xp: 0,
-      position: [positionX,positionY],
-      bullet: bulletNum,
-      coins: coinCount,
-      hPotionCount: healthPotionCount,
-      mPotionCount: manaPotionCount,
-      health: healthCount,
-      mana: manaCount,
-      wall: wallCount,
-      diff: gameDifficulty1,
-      round: round,
-      zombieSpeedRate: zombieSpeedRate,
-      zombieCooldownRate :zombieCooldownRate,
-      zombieCooldown: zombieCooldown,
-      zombieBulletSpeed: zombieBulletSpeed,
-      zombieBulletCooldown: zombieBulletCooldown,
-      priceIncrement: priceIncrement,
-      bossHealth: bossHealth,
-      bossRounds: bossRounds,
-      zombieSpeed: zombieSpeed,
-      zombieLimit: zombieLimit,
-      bulletNum: bulletNum,
-      shootingCooldown: shootingCooldown,
-      coinCount: coinCount,
-      manaPotionCount: manaPotionCount,
-      healthPotionCount: healthPotionCount,
-      buffedZombieSpawnChance: buffedZombieSpawnChance,
-      miniBossLimit: miniBossLimit,
-      dumbZombieSpawnRate: dumbZombieSpawnRate,
-      wallData: walls
-    }
-    localStorage.setItem('playerData', JSON.stringify(playerData));
+    console.log(saveNum2)
+    localStorage.setItem('debugPD',JSON.stringify(playerData))
+    localStorage.setItem('debugSN2',JSON.stringify(saveNum2))
+
+     let storedData = JSON.parse(localStorage.getItem('playerData')) || {};
+     storedData[saveNum2] = {
+         level: 0,
+         xp: 0,
+         position: [positionX, positionY],
+         bullet: bulletNum,
+         coins: coinCount,
+         hPotionCount: healthPotionCount,
+         mPotionCount: manaPotionCount,
+         health: healthCount,
+         mana: manaCount,
+         wall: wallCount,
+         diff: gameDifficulty1,
+         round: round,
+         zombieSpeedRate: zombieSpeedRate,
+         zombieCooldownRate: zombieCooldownRate,
+         zombieCooldown: zombieCooldown,
+         zombieBulletSpeed: zombieBulletSpeed,
+         zombieBulletCooldown: zombieBulletCooldown,
+         priceIncrement: priceIncrement,
+         bossHealth: bossHealth,
+         bossRounds: bossRounds,
+         zombieSpeed: zombieSpeed,
+         zombieLimit: zombieLimit,
+         bulletNum: bulletNum,
+         shootingCooldown: shootingCooldown,
+         coinCount: coinCount,
+         manaPotionCount: manaPotionCount,
+         healthPotionCount: healthPotionCount,
+         buffedZombieSpawnChance: buffedZombieSpawnChance,
+         miniBossLimit: miniBossLimit,
+         dumbZombieSpawnRate: dumbZombieSpawnRate,
+         wallData: walls,
+         saveName:undefined,
+     };
+     localStorage.setItem('playerData', JSON.stringify(storedData));
+ 
       if(zombieCooldown>50){
       zombieCooldown -= zombieCooldownRate;
       }
@@ -1415,7 +1530,8 @@ roundInterval = setInterval(()=>{
 // console.log(`roundmanager run`)
 }
 
-
+console.log(JSON.parse(localStorage.getItem('debugPD')))
+console.log(JSON.parse(localStorage.getItem('debugSN2')))
 setInterval(function(){
 roundManager()
 },100)
@@ -1497,7 +1613,7 @@ document.getElementById('welcome').innerHTML = `
   <button id="controls" class="welcome-buttons" onclick="controls()">Controls</button>
   <button id="credit" class="welcome-buttons" onclick="credit()">Credit</button>
 </div>
-<div id="version-info"><div>Version 1.3.3</div><a href="patches.html" target="_blank"><button id="version-button">Patch Notes</button></a> </div>
+<div id="version-info"><div>Version 1.3.4</div><a href="patches.html" target="_blank"><button id="version-button">Patch Notes</button></a> </div>
 `}
 }
 function credit(){
@@ -2265,3 +2381,4 @@ setInterval(()=>{
 function logPerformance(){
   loggedPerformance = !loggedPerformance;
 }
+
