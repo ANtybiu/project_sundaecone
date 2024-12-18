@@ -310,7 +310,7 @@ height: 10px;
   width: 750px;
   background-color: red;
 }
-#difficulty,#save-files{
+#difficulty{
   display:none;
   flex-direction: column;
   align-items: center;
@@ -448,4 +448,100 @@ height: 10px;
   left: 25vw;
   top:50vh;
 }
-
+#save-files{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items:center;
+  text-align: center;
+  background-color: black;
+  width: 100vw;
+  height: 100vh;
+  color: white;
+}
+.save-files-list{
+  border: 2.5px white solid;
+  display:flex;
+  align-items: center;
+  padding: 2.5px;
+  width: 50vw;
+  height:100px;
+}
+.save-icon{
+  margin-left: 10px;
+}
+.save-info{
+  margin-left:15px;
+  border-left: 2px solid white;
+  padding-left: 5px;
+  height:100%;
+  width:100%;
+  display: flex;
+  flex-direction: column;
+}
+.save-title{
+  font-size: 28px;
+  font-weight:bold;
+  border-bottom: 2px solid white;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+.save-info-2{
+  display: flex;
+  text-align:left;
+  font-size:20px;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.save-info-settings{
+  margin-top:10px
+}
+.save-info-stats{
+  font-size:18px;
+  margin-top:5px;
+  margin-right: 5px;
+}
+.save-buttons{
+  font-family: Pixelify Sans;
+  font-size: 18px;
+  cursor: pointer;
+  background-color: rgb(240, 240, 240);
+  border: 2px gray solid;
+  width: 100px
+}
+.save-buttons:hover{
+  opacity: 0.9;
+}
+#delete-all{
+  font-family: Pixelify Sans;
+  font-size: 7.5px;
+  cursor: pointer;
+  background-color: rgb(240, 240, 240);
+  border: 2px gray solid;
+  width: 60px;
+  height: 25px;
+  position: fixed;
+  top:0;
+  left:0;
+}
+.save-name{
+  height: 34px !important;
+  outline: none;
+  font-size: 28px;
+  font-weight:bold;
+  font-family: Pixelify Sans;
+  text-align: center;
+  vertical-align: middle;
+  background-color: black;
+  border:none;
+  color:white;
+}
+.save-name::placeholder{
+  font-size: 28px;
+  font-weight:bold;
+  font-family: Pixelify Sans;
+  text-align: center;
+  vertical-align: middle;
+  color: white;
+} 
