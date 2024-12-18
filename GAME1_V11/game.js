@@ -268,9 +268,8 @@ function createSave(savenom){
 
 function deleteSaves(delSaveNumber){
   let save = `save${delSaveNumber}`
-  let userData = JSON.parse(localStorage.getItem('playerData'));
+  let userData = JSON.parse(localStorage.getItem('playerData')) || {};
   delete userData.save;
-  localStorage.removeItem('playerData')
   document.getElementById(save).innerHTML = `
       <div class="save-icon"><img src="save_icon.png"></div>
       <div class="save-info">
